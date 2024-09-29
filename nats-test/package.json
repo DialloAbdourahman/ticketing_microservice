@@ -1,0 +1,28 @@
+{
+  "name": "nats-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "order": "ts-node-dev --notify false src/rabbitmq/order-service.ts",
+    "ticketing": "ts-node-dev --notify false src/rabbitmq/ticketing-service.ts",
+    "expiration": "ts-node-dev --notify false src/rabbitmq/expiration-service.ts",
+    "connection": "ts-node-dev --notify false src/rabbitmq/connection.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/node": "^22.1.0",
+    "amqplib": "^0.10.4",
+    "kafkajs": "^2.2.4",
+    "nats": "^2.28.2",
+    "node-nats-streaming": "^0.3.2",
+    "rabbitmq-client": "^4.6.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.10.5"
+  }
+}

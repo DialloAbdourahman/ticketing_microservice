@@ -1,0 +1,33 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: ticketing
+build:
+  artifacts:
+    - image: dialloabdourahman/auth-ticketing
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+    - image: dialloabdourahman/client-ticketing
+      context: client
+      docker:
+        dockerfile: Dockerfile
+    - image: dialloabdourahman/tickets-ticketing
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+    - image: dialloabdourahman/orders-ticketing
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - infra/k8s/auth-depl.yaml
+    - infra/k8s/auth-mongo-depl.yaml
+    - infra/k8s/client-depl.yaml
+    - infra/k8s/ingress-srv.yaml
+    - infra/k8s/tickets-depl.yaml
+    - infra/k8s/tickets-mongo-depl.yaml
+    - infra/k8s/orders-depl.yaml
+    - infra/k8s/orders-mongo-depl.yaml
+    - infra/k8s/rabbitmq-depl.yaml

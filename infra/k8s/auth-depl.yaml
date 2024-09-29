@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector: # tells the deployment how to find all all pods that it has to manage.
+    matchLabels:
+      app: auth # manage pods with the label posts
+  template: # config of the pod.
+    metadata:
+      labels:
+        app: auth # match the selector above too. This is the name of the PODs
+    spec: # tell the pod how to behave
+      containers:
+        - name: auth # this is important for logging purpose.
+          image: dialloabdourahman/auth-ticketing # same as image: dialloabdourahman/auth-ticketing:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MONGO_URI
+              value: "mongodb://auth-mongo-srv:27017/auth"
+            - name: JWT_KEY # key found in the jwt-secret secret object
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret # name of the secret object
+                  key: JWT_KEY
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  type: ClusterIP # the default service is a clusterip. even if we don't specify the type it will default to clusterip
+  selector:
+    app: auth # still selects the label above.
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+# nodeport: Listens for external request on all worker nodes on nodeip:nodeport and forwards the request to port.
+
+# ClusterIP: Request comes through ingress and points to service name and port.
+
+# port: Internal cluster service port for container and listens for incoming request from the nodeport and forwards to targetPort.
+
+# targetPort: Receives the request from port and forwards to container pod(port) where it's listening. Even if you don't specify this will get by default assigned the same port numbers as port.
+
+# k create secret generic jwt-secret --from-literal=JWT_KEY=asfasdfasdfasdfasdfasdfasdf
+
+# k create secret generic auth-ticketing-secret --from-literal=NODE_ENV=production --from-literal=MONGODB_URL=mongodb://auth-mongo-srv:27017/auth --from-literal=PORT=3000
