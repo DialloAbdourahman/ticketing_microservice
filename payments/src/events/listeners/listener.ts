@@ -1,10 +1,9 @@
 import { EXCHANGES, KEYS, QUEUES } from "@daticketslearning/common";
 import { Connection, ConsumeMessage } from "amqplib";
-import { ticketCreatedHandler } from "./handlers/ticketCreatedHandler";
-import { ticketUpdatedHandler } from "./handlers/ticketUpdatedHandler";
-import { expirationCompleteHandler } from "./handlers/expirationCompleteHandler";
+import { orderCreatedHandler } from "./handlers/order-created-handler";
+import { orderCancelledHandler } from "./handlers/order-cancelled-handler";
 
-export class OrderServiceListener {
+export class PaymentsServiceListener {
   private conn: Connection;
 
   constructor(conn: Connection) {
@@ -26,7 +25,7 @@ export class OrderServiceListener {
     });
 
     // Queue creation / assertion
-    const q = await channel.assertQueue(QUEUES.ORDERS_QUEUE, {
+    const q = await channel.assertQueue(QUEUES.PAYMENT_QUEUE, {
       durable: true,
     });
 
@@ -34,17 +33,12 @@ export class OrderServiceListener {
     channel.bindQueue(
       q.queue,
       EXCHANGES.TICKETING_EXCHANGE,
-      KEYS.TICKET_CREATED
+      KEYS.ORDER_CREATED
     );
     channel.bindQueue(
       q.queue,
       EXCHANGES.TICKETING_EXCHANGE,
-      KEYS.TICKET_UPDATED
-    );
-    channel.bindQueue(
-      q.queue,
-      EXCHANGES.TICKETING_EXCHANGE,
-      KEYS.EXPIRATION_COMPLETE
+      KEYS.ORDER_CANCELLED
     );
 
     channel.consume(
@@ -55,19 +49,16 @@ export class OrderServiceListener {
           const parsedData = this.parseMessage(msg);
 
           console.log(
-            `Received message with key: ${key}, exchange: ${EXCHANGES.TICKETING_EXCHANGE}, queue: ${QUEUES.ORDERS_QUEUE} and message: `,
+            `Received message with key: ${key}, exchange: ${EXCHANGES.TICKETING_EXCHANGE}, queue: ${QUEUES.PAYMENT_QUEUE} and message: `,
             parsedData
           );
 
           switch (key) {
-            case KEYS.TICKET_CREATED:
-              await ticketCreatedHandler(parsedData, msg, channel);
+            case KEYS.ORDER_CREATED:
+              await orderCreatedHandler(parsedData, msg, channel);
               break;
-            case KEYS.TICKET_UPDATED:
-              await ticketUpdatedHandler(parsedData, msg, channel);
-              break;
-            case KEYS.EXPIRATION_COMPLETE:
-              await expirationCompleteHandler(parsedData, msg, channel);
+            case KEYS.ORDER_CANCELLED:
+              await orderCancelledHandler(parsedData, msg, channel);
               break;
             default:
               channel.nack(msg, false, false);
@@ -81,7 +72,7 @@ export class OrderServiceListener {
     );
 
     console.log(
-      `[*] Waiting for messages on the order service and queue: ${QUEUES.ORDERS_QUEUE}. To exit press CTRL+C`
+      `[*] Waiting for messages on the payments service and queue: ${QUEUES.PAYMENT_QUEUE}. To exit press CTRL+C`
     );
   }
 }
