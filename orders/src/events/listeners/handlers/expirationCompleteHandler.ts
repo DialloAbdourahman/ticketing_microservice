@@ -20,6 +20,11 @@ export const expirationCompleteHandler = async (
       throw new Error("Order not found");
     }
 
+    if (order.status === OrderStatus.Complete) {
+      channel.ack(message);
+      return;
+    }
+
     order.status = OrderStatus.Cancelled;
     await order.save();
 

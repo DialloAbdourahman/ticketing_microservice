@@ -6,6 +6,8 @@ import {
   currentUser,
 } from "@daticketslearning/common";
 import cookieSession from "cookie-session";
+import { createChargeRouter } from "./routes/new";
+import { webhook } from "./routes/webhook";
 
 const app = express();
 app.set("trust proxy", true);
@@ -20,6 +22,9 @@ app.use(
 );
 
 app.use(currentUser);
+
+app.use(createChargeRouter);
+app.use(webhook);
 
 app.all("*", () => {
   throw new NotFoundError();

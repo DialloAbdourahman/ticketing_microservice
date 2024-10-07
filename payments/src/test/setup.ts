@@ -11,6 +11,7 @@ let mongo: MongoMemoryServer;
 
 // Could have also mocked this : TicketCreatedPublisher
 jest.mock("../rabbitmq-wrapper.ts");
+jest.mock("../stripe.ts");
 
 // Runs before all our tests starts
 beforeAll(async () => {
@@ -39,12 +40,10 @@ afterAll(async () => {
   console.log("disconnected to the in-memory test mongodb");
 });
 
-export const signinTest = () => {
-  const id = new mongoose.Types.ObjectId().toHexString();
-
+export const signinTest = (id?: string) => {
   // Build a jwt payload. {id, email}
   const payload = {
-    id,
+    id: id || new mongoose.Types.ObjectId().toHexString(),
     email: "test@test.com",
   };
 
