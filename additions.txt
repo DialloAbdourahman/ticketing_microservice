@@ -1,4 +1,4 @@
-Use real dockerfile files to build production based images.
-Make sure that the images are on pull in the kubernetes file. Push the image on github first.
 Persistent volumes for dbs and rabbitmq.
-set the cookie secure flags back to true and make sure that only https connections are allowed.
+
+set the cookie secure flags back to true and make sure that only https connections are allowed. (During a github push)
+Change the image pull policy to always when deploying to the kubernetes cluster

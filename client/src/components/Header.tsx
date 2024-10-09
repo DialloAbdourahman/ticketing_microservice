@@ -11,16 +11,23 @@ const Header = () => {
 
   return (
     <header className="">
-      <h1>Ticketing.dev</h1>
+      <Link to={"/"}>
+        <h1>Ticketing.dev</h1>
+      </Link>
+
       {user ? (
-        <button onClick={() => signOut()}>Sign out</button>
+        <>
+          <Link to={"/new-ticket"}>Sell tickets</Link>
+          <Link to={"/orders"}>See orders</Link>
+          <button onClick={() => signOut()}>Sign out</button>
+        </>
       ) : (
         <>
-          {" "}
           <Link to={"/auth/signin"}>signin</Link>
           <Link to={"/auth/signup"}>signup</Link>
         </>
       )}
+      <div>Home : {user ? user.email : "Not authenticated"}</div>
     </header>
   );
 };

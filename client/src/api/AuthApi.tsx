@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLoadingUser, setUser } from "../store/auth.slice";
 
-const API_URL = "/api/users";
+const API_URL = "http://ticketing.dev/api/users";
 
 export type AuthResponseType = {
   email: string;

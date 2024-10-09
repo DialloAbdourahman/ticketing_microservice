@@ -10,9 +10,7 @@ const Signin = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const data = await signin(email, password);
-
-    console.log(data);
+    await signin(email, password);
   };
 
   if (loading) {
