@@ -43,3 +43,21 @@ manifests:
     - infra/k8s/expiration-redis-depl.yaml
     - infra/k8s/payments-depl.yaml
     - infra/k8s/payments-mongo-depl.yaml
+##############################################
+
+# apiVersion: skaffold/v4beta11
+# kind: Config
+# metadata:
+#   name: ticketing
+# build:
+#   artifacts:
+#     - image: dialloabdourahman/auth-ticketing
+#       context: auth
+#       docker:
+#         dockerfile: Dockerfile
+# manifests:
+#   rawYaml:
+#     - infra/k8s/auth-depl.yaml
+#     - infra/k8s/auth-mongo-depl.yaml
+#     - infra/k8s/ingress-srv.yaml
+#     - infra/k8s/rabbitmq-depl.yaml
