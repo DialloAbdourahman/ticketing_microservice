@@ -2,7 +2,7 @@ import { rabbitMqWrapper } from "./rabbitmq-wrapper";
 import { ExpirationServiceListener } from "./events/listeners/listener";
 
 const start = async () => {
-  console.log("Starting up...");
+  console.log("Starting up.....");
 
   try {
     await rabbitMqWrapper.connect();
