@@ -4,6 +4,8 @@ import { rabbitMqWrapper } from "./rabbitmq-wrapper";
 import { OrderServiceListener } from "./events/listeners/listener";
 
 const start = async () => {
+  console.log("Starting up...");
+
   if (!process.env.JWT_KEY) {
     throw new Error("JWT_KEY must be defined.");
   }
@@ -44,7 +46,7 @@ const start = async () => {
     // Run listener
     new OrderServiceListener(rabbitMqWrapper.client).listen();
   } catch (error) {
-    console.log("Error connecting to Rabbitmq, retrying in 5 seconds");
+    console.log("Error connecting to Rabbitmq.");
     console.log(error);
 
     // Exit if it cannot connect to rabbit mq and then kubernetes will recreate this pod and retry to connect.
