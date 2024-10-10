@@ -7,6 +7,7 @@
     "start": "node dist/index.js",
     "dev": "ts-node-dev src/index.ts",
     "test": "jest --watchAll --no-cache",
+    "test:ci": "jest",
     "build": "tsc"
   },
   "jest": {
