@@ -1,0 +1,84 @@
+# Define the PersistentVolume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: auth-mongo-pv
+spec:
+  storageClassName: "" # Use empty string to indicate no storage class
+  capacity:
+    storage: 5Gi # Define the storage capacity
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/auth-mongo # Host path for storage
+  persistentVolumeReclaimPolicy: Retain
+
+---
+# Define the PersistentVolumeClaim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auth-mongo-pvc
+spec:
+  storageClassName: "" # Use empty string to prevent default storage class
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  volumeName: auth-mongo-pv # Reference the PV by name
+
+---
+# MongoDB Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-mongo
+  template:
+    metadata:
+      labels:
+        app: auth-mongo
+    spec:
+      containers:
+        - name: auth-mongo
+          image: mongo:latest # MongoDB image from DockerHub
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: mongo-data # References a volume (mongo-data)
+              mountPath: /data/db # Mount the volume to the MongoDB data directory
+      volumes:
+        - name: mongo-data
+          persistentVolumeClaim:
+            claimName: auth-mongo-pvc # Reference the PVC by name
+
+---
+# MongoDB Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-mongo-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: auth-mongo
+  ports:
+    - name: auth-mongo
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+# It means that the directory /data/db inside the container will be linked to the Kubernetes volume named mongo-data. As a result:
+
+# Any data written to /data/db inside the MongoDB container will be stored in the mongo-data volume.
+# This volume can be backed by a variety of storage options (like a PersistentVolumeClaim, an emptyDir, or others) depending on what you define in the volumes section.
+# The data stored in /data/db will persist even if the container restarts, because the storage is managed at the pod level, outside of the container's lifecycle.
+# Why Mounting /data/db Matters for MongoDB:
+# MongoDB uses /data/db as its default directory to store database files. By mounting the mongo-data volume at this path:
+
+# You ensure that the database files are stored in a separate storage volume instead of the container's ephemeral filesystem.
+# This approach allows you to retain your database data even if the MongoDB container is terminated, restarted, or re-scheduled onto another node.
+# If the volume is backed by a PersistentVolume (via a PersistentVolumeClaim), you also get persistent storage that can outlive the pod itself.
