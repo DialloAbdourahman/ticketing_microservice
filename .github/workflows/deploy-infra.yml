@@ -1,30 +1,30 @@
-name: deploy-infra
+# name: deploy-infra
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - "infra/k8s/prod"
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - "infra/k8s/prod"
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
       
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: $DIGITALOCEAN_ACCESS_TOKEN
-        env:
-          DIGITAL_OCEAN_ACCESS_TOKEN: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
+#       - name: Install doctl
+#         uses: digitalocean/action-doctl@v2
+#         with:
+#           token: $DIGITALOCEAN_ACCESS_TOKEN
+#         env:
+#           DIGITAL_OCEAN_ACCESS_TOKEN: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
 
-      - name: Save DigitalOcean kubeconfig
-        run: doctl kubernetes cluster kubeconfig save $DIGITAL_OCEAN_CLUSTER_NAME
-        env:
-          DIGITAL_OCEAN_CLUSTER_NAME: ${{ secrets.DIGITAL_OCEAN_CLUSTER_NAME }}
+#       - name: Save DigitalOcean kubeconfig
+#         run: doctl kubernetes cluster kubeconfig save $DIGITAL_OCEAN_CLUSTER_NAME
+#         env:
+#           DIGITAL_OCEAN_CLUSTER_NAME: ${{ secrets.DIGITAL_OCEAN_CLUSTER_NAME }}
 
-      - name: Apply the deployments
-        run: kubectl apply -f infra/k8s/prod
+#       - name: Apply the deployments
+#         run: kubectl apply -f infra/k8s/prod
 
