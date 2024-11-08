@@ -1,0 +1,65 @@
+name: build-deploy-payments
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "payments/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Build the docker image
+        run: cd payments && docker build -t dialloabdourahman/payments-ticketing:latest .
+      
+      - name: Login to dockerhub
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Push the image to dockerhub
+        run: docker push dialloabdourahman/payments-ticketing:latest
+
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Login to dockerhub
+  #       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  #       env:
+  #         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  #         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  #     - name: Install doctl
+  #       uses: digitalocean/action-doctl@v2
+  #       with:
+  #         token: $DIGITALOCEAN_ACCESS_TOKEN
+  #       env:
+  #         DIGITAL_OCEAN_ACCESS_TOKEN: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
+
+  #     - name: Save DigitalOcean kubeconfig
+  #       run: doctl kubernetes cluster kubeconfig save $DIGITAL_OCEAN_CLUSTER_NAME
+  #       env:
+  #         DIGITAL_OCEAN_CLUSTER_NAME: ${{ secrets.DIGITAL_OCEAN_CLUSTER_NAME }}
+
+  #     - name: Restart the kubernetes deployment
+  #       run: kubectl rollout restart deployment payments-depl
+
+
+  # STEPS TO CONNECT TO MY DIGITAL OCEAN KUBERNETES CLUSTER ON MY LOCAL MACHINE
+      # 1) CREATE A DIGITAL OCEAN ACCOUNT.
+      # 2) CREATE A KUBERNETES CLUSTER.
+      # 3) INTSTALL DOCTL (DIGITAL OCEAN COMMAND LINE TOOL) ON YOUR LOCAL MACHINE USING THE LINK: https://docs.digitalocean.com/reference/doctl/how-to/install/
+      # 4) GENERATE A NEW ACCESS TOKEN ON DIGITAL OCEAN AND COPY IT.
+      # 5) RUN THE COMMAND doctl payments init AND PASTE THE TOKEN THEN PRESS ENTER
+      # 6) USE DOCTL TO INSTALL A NEW KUBERNETES CONTEXT IN OUR LOCAL MACHINE USING THE COMMAND: doctl kubernetes cluster kubeconfig save CLUSTER-NAME
+      # 7) CONGRATULATIONS !!!!
+            # a) USE THE COMMAND: "kubectl config view" TO SEE ALL YOUR CONTEXTS
+            # b) USE THE COMMAND: "kubectl config use-context context-name" TO SWITCH CONTEXT
