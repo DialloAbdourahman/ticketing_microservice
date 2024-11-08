@@ -12,7 +12,7 @@ app.use(
   cookieSession({
     signed: false, // Make sure that the cookie is not encrypted to assure reusability across different languages.
     secure: false, // In prod, it is true but in test it should be false since jest is http not https
-    // secure: true,
+    // secure: false,
   })
 );
 

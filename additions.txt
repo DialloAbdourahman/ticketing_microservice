@@ -1,3 +1,0 @@
-
-set the cookie secure flags back to true and make sure that only https connections are allowed. (During a github push)
-Change the image pull policy to always when deploying to the kubernetes cluster

@@ -20,9 +20,9 @@ it("returns the ticket if the ticket is found", async () => {
     .expect(201);
 
   const ticketResponse = await request(app)
-    .get(`/api/tickets/${response.body.id}`)
+    .get(`/api/tickets/${response.body.data.id}`)
     .send({ title, price })
     .expect(200);
-  expect(ticketResponse.body.title).toBe(title);
-  expect(ticketResponse.body.price).toBe(price);
+  expect(ticketResponse.body.data.title).toBe(title);
+  expect(ticketResponse.body.data.price).toBe(price);
 });

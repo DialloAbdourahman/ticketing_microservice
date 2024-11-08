@@ -3,6 +3,7 @@ import { Order } from "../model/order";
 import {
   NotAuthorizedError,
   NotFoundError,
+  OrchestrationResult,
   OrderStatus,
   requireAuth,
 } from "@daticketslearning/common";
@@ -38,7 +39,7 @@ router.delete(
       version: order.version,
     });
 
-    res.status(204).send(order);
+    OrchestrationResult.success(res);
   }
 );
 

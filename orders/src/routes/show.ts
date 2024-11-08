@@ -3,6 +3,7 @@ import { Order } from "../model/order";
 import {
   NotAuthorizedError,
   NotFoundError,
+  OrchestrationResult,
   requireAuth,
 } from "@daticketslearning/common";
 
@@ -22,7 +23,7 @@ router.get(
       throw new NotAuthorizedError();
     }
 
-    res.send(order);
+    OrchestrationResult.item(res, order);
   }
 );
 

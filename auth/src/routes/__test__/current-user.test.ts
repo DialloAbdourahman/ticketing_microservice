@@ -10,5 +10,5 @@ it("Responds with details about current user.", async () => {
     .set("Cookie", cookie)
     .send()
     .expect(200);
-  expect(response.body.currentUser.email).toBe("test@test.com");
+  expect(response.body.data.email).toBe("test@test.com");
 });

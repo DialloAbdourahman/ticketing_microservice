@@ -32,7 +32,7 @@ it("returns a 401 if user does not own the ticket", async () => {
     .expect(201);
 
   await request(app)
-    .put(`/api/tickets/${response.body.id}`)
+    .put(`/api/tickets/${response.body.data.id}`)
     .set("Cookie", signinTest())
     .send({ title: "asdfasdf", price: 20 })
     .expect(401);
@@ -70,15 +70,15 @@ it("updates the ticket provided valid inputs", async () => {
     .expect(201);
 
   await request(app)
-    .put(`/api/tickets/${response.body.id}`)
+    .put(`/api/tickets/${response.body.data.id}`)
     .set("Cookie", cookie)
     .send({ title: "asdf", price: 20 })
     .expect(200);
 
   const ticketResponse = await request(app)
-    .get(`/api/tickets/${response.body.id}`)
+    .get(`/api/tickets/${response.body.data.id}`)
     .send();
-  expect(ticketResponse.body.title).toBe("asdf");
+  expect(ticketResponse.body.data.title).toBe("asdf");
 });
 
 it("publishes an event", async () => {
@@ -91,7 +91,7 @@ it("publishes an event", async () => {
     .expect(201);
 
   await request(app)
-    .put(`/api/tickets/${response.body.id}`)
+    .put(`/api/tickets/${response.body.data.id}`)
     .set("Cookie", cookie)
     .send({ title: "asdf", price: 20 })
     .expect(200);
@@ -108,19 +108,19 @@ it("it rejects updates if the ticket is reserved", async () => {
     .send({ title: "asdfasdf", price: 20 })
     .expect(201);
 
-  const ticket = await Ticket.findById(response.body.id);
+  const ticket = await Ticket.findById(response.body.data.id);
   ticket?.set({ orderId: new mongoose.Types.ObjectId().toHexString() });
   await ticket?.save();
 
   await request(app)
-    .put(`/api/tickets/${response.body.id}`)
+    .put(`/api/tickets/${response.body.data.id}`)
     .set("Cookie", cookie)
     .send({ title: "asdf", price: 20 })
     .expect(400);
 
   const ticketResponse = await request(app)
-    .get(`/api/tickets/${response.body.id}`)
+    .get(`/api/tickets/${response.body.data.id}`)
     .send();
-  expect(ticketResponse.body.title).toBe("asdfasdf");
-  expect(ticketResponse.body.price).toBe(20);
+  expect(ticketResponse.body.data.title).toBe("asdfasdf");
+  expect(ticketResponse.body.data.price).toBe(20);
 });

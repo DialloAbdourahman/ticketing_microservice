@@ -5,6 +5,7 @@ import { PasswordManager } from "../services/password";
 import {
   BadRequestError,
   currentUser,
+  OrchestrationResult,
   requireAuth,
 } from "@daticketslearning/common";
 
@@ -40,12 +41,12 @@ router.post("/signin", validateSignIn, async (req: Request, res: Response) => {
     jwt: userJwt,
   };
 
-  res.status(200).send(existingUser);
+  OrchestrationResult.item(res, existingUser);
 });
 
 router.post("/signout", (req: Request, res: Response) => {
   req.session = null;
-  res.send({});
+  OrchestrationResult.success(res);
 });
 
 router.post("/signup", validateSignup, async (req: Request, res: Response) => {
@@ -70,15 +71,16 @@ router.post("/signup", validateSignup, async (req: Request, res: Response) => {
     jwt: userJwt,
   };
 
-  res.status(201).send(user);
+  OrchestrationResult.item(res, user, 201);
 });
 
 router.get(
   "/currentuser",
   currentUser,
   requireAuth,
-  (req: Request, res: Response) => {
-    res.send({ currentUser: req.currentUser || null });
+  async (req: Request, res: Response) => {
+    const user = await User.findById(req.currentUser?.id);
+    OrchestrationResult.item(res, user);
   }
 );
 

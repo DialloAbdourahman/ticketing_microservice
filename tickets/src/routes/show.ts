@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { NotFoundError } from "@daticketslearning/common";
+import { NotFoundError, OrchestrationResult } from "@daticketslearning/common";
 import { Ticket } from "../model/ticket";
 
 const router = express.Router();
@@ -13,7 +13,7 @@ router.get("/api/tickets/:id", async (req: Request, res: Response) => {
     throw new NotFoundError();
   }
 
-  res.send(ticket);
+  OrchestrationResult.item(res, ticket);
 });
 
 export { router as showTicketRouter };

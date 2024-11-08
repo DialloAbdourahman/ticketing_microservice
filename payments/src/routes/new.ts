@@ -3,6 +3,7 @@ import {
   BadRequestError,
   NotAuthorizedError,
   NotFoundError,
+  OrchestrationResult,
   OrderStatus,
   requireAuth,
 } from "@daticketslearning/common";
@@ -44,11 +45,15 @@ router.post(
       },
     });
 
-    res.status(201).send({
-      clientSecret: paymentIntent.client_secret,
-      // [DEV]: For demo purposes only, you should avoid exposing the PaymentIntent ID in the client-side code.
-      // dpmCheckerLink: `https://dashboard.stripe.com/settings/payment_methods/review?transaction_id=${paymentIntent.id}`,
-    });
+    OrchestrationResult.item(
+      res,
+      {
+        clientSecret: paymentIntent.client_secret,
+        // [DEV]: For demo purposes only, you should avoid exposing the PaymentIntent ID in the client-side code.
+        // dpmCheckerLink: `https://dashboard.stripe.com/settings/payment_methods/review?transaction_id=${paymentIntent.id}`,
+      },
+      201
+    );
   }
 );
 
