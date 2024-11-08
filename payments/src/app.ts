@@ -17,7 +17,7 @@ app.use(
   cookieSession({
     signed: false,
     secure: false,
-    // secure: true,
+    // secure: false,
   })
 );
 

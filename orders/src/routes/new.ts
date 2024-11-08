@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import {
   BadRequestError,
   NotFoundError,
+  OrchestrationResult,
   OrderStatus,
   requireAuth,
 } from "@daticketslearning/common";
@@ -60,7 +61,7 @@ router.post(
       version: order.version,
     });
 
-    res.status(201).send(order);
+    OrchestrationResult.item(res, order, 201);
   }
 );
 

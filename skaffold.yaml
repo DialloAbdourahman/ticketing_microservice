@@ -8,10 +8,6 @@ build:
       context: auth
       docker:
         dockerfile: Dockerfile
-    - image: dialloabdourahman/client-ticketing
-      context: client
-      docker:
-        dockerfile: Dockerfile
     - image: dialloabdourahman/tickets-ticketing
       context: tickets
       docker:
@@ -30,34 +26,15 @@ build:
         dockerfile: Dockerfile
 manifests:
   rawYaml:
-    - infra/k8s/auth-depl.yaml
-    - infra/k8s/auth-mongo-depl.yaml
-    - infra/k8s/client-depl.yaml
-    - infra/k8s/ingress-srv.yaml
-    - infra/k8s/tickets-depl.yaml
-    - infra/k8s/tickets-mongo-depl.yaml
-    - infra/k8s/orders-depl.yaml
-    - infra/k8s/orders-mongo-depl.yaml
-    - infra/k8s/rabbitmq-depl.yaml
-    - infra/k8s/expiration-depl.yaml
-    - infra/k8s/expiration-redis-depl.yaml
-    - infra/k8s/payments-depl.yaml
-    - infra/k8s/payments-mongo-depl.yaml
-##############################################
-
-# apiVersion: skaffold/v4beta11
-# kind: Config
-# metadata:
-#   name: ticketing
-# build:
-#   artifacts:
-#     - image: dialloabdourahman/auth-ticketing
-#       context: auth
-#       docker:
-#         dockerfile: Dockerfile
-# manifests:
-#   rawYaml:
-#     - infra/k8s/auth-depl.yaml
-#     - infra/k8s/auth-mongo-depl.yaml
-#     - infra/k8s/ingress-srv.yaml
-#     - infra/k8s/rabbitmq-depl.yaml
+    - infra/k8s/dev/auth-depl.yaml
+    - infra/k8s/dev/auth-mongo-depl.yaml
+    - infra/k8s/dev/ingress-srv.yaml
+    - infra/k8s/dev/tickets-depl.yaml
+    - infra/k8s/dev/tickets-mongo-depl.yaml
+    - infra/k8s/dev/orders-depl.yaml
+    - infra/k8s/dev/orders-mongo-depl.yaml
+    - infra/k8s/dev/rabbitmq-depl.yaml
+    - infra/k8s/dev/expiration-depl.yaml
+    - infra/k8s/dev/expiration-redis-depl.yaml
+    - infra/k8s/dev/payments-depl.yaml
+    - infra/k8s/dev/payments-mongo-depl.yaml

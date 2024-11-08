@@ -4,6 +4,7 @@ import {
   NotFoundError,
   NotAuthorizedError,
   BadRequestError,
+  OrchestrationResult,
 } from "@daticketslearning/common";
 import { validateCreateTicket } from "../middleware/validate-request";
 import { Ticket } from "../model/ticket";
@@ -48,7 +49,7 @@ router.put(
       version: ticket.version,
     });
 
-    res.send(ticket);
+    OrchestrationResult.item(res, ticket);
   }
 );
 

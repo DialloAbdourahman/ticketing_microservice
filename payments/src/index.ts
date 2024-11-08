@@ -28,6 +28,7 @@ const start = async () => {
   } catch (error) {
     console.log("Database connection error.");
     console.error(error);
+    process.exit();
   }
 
   try {

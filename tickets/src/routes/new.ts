@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { requireAuth } from "@daticketslearning/common";
+import { OrchestrationResult, requireAuth } from "@daticketslearning/common";
 import { validateCreateTicket } from "../middleware/validate-request";
 import { Ticket } from "../model/ticket";
 import { TicketCreatedPublisher } from "../events/publishers/TicketCreatedPublisher";
@@ -30,7 +30,7 @@ router.post(
       version: ticket.version,
     });
 
-    res.status(201).send(ticket);
+    OrchestrationResult.item(res, ticket, 201);
   }
 );
 

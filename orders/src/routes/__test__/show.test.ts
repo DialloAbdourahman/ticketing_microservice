@@ -9,7 +9,7 @@ it("fetches a ticket", async () => {
 
   const userOne = signinTest();
 
-  const { body: order } = await request(app)
+  const orderCreationResponse = await request(app)
     .post("/api/orders")
     .set("Cookie", userOne)
     .send({
@@ -18,10 +18,10 @@ it("fetches a ticket", async () => {
     .expect(201);
 
   const response = await request(app)
-    .get(`/api/orders/${order.id}`)
+    .get(`/api/orders/${orderCreationResponse.body.data.id}`)
     .set("Cookie", userOne)
     .send();
 
   expect(response.status).toEqual(200);
-  expect(response.body.id).toEqual(order.id);
+  expect(response.body.data.id).toEqual(orderCreationResponse.body.data.id);
 });

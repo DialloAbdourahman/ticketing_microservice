@@ -12,7 +12,7 @@ it("cancels an order", async () => {
 
   const userOne = signinTest();
 
-  const { body: order } = await request(app)
+  const orderCreatedResponse = await request(app)
     .post("/api/orders")
     .set("Cookie", userOne)
     .send({
@@ -21,13 +21,13 @@ it("cancels an order", async () => {
     .expect(201);
 
   const response = await request(app)
-    .delete(`/api/orders/${order.id}`)
+    .delete(`/api/orders/${orderCreatedResponse.body.data.id}`)
     .set("Cookie", userOne)
     .send();
 
-  expect(response.status).toEqual(204);
+  expect(response.status).toEqual(200);
 
-  const updatedOrder = await Order.findById(order.id);
+  const updatedOrder = await Order.findById(orderCreatedResponse.body.data.id);
   expect(updatedOrder?.status).toEqual(OrderStatus.Cancelled);
 });
 
@@ -36,7 +36,7 @@ it("emits an event after cancelling an order", async () => {
 
   const userOne = signinTest();
 
-  const { body: order } = await request(app)
+  const orderCreatedResponse = await request(app)
     .post("/api/orders")
     .set("Cookie", userOne)
     .send({
@@ -45,13 +45,13 @@ it("emits an event after cancelling an order", async () => {
     .expect(201);
 
   const response = await request(app)
-    .delete(`/api/orders/${order.id}`)
+    .delete(`/api/orders/${orderCreatedResponse.body.data.id}`)
     .set("Cookie", userOne)
     .send();
 
-  expect(response.status).toEqual(204);
+  expect(response.status).toEqual(200);
 
-  const updatedOrder = await Order.findById(order.id);
+  const updatedOrder = await Order.findById(orderCreatedResponse.body.data.id);
   expect(updatedOrder?.status).toEqual(OrderStatus.Cancelled);
 
   expect(rabbitMqWrapper.client.createChannel).toHaveBeenCalled();
