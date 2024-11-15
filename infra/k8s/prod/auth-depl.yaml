@@ -50,3 +50,5 @@ spec:
 # k create secret generic jwt-secret --from-literal=JWT_KEY=asfasdfasdfasdfasdfasdfasdf
 
 # k create secret generic auth-ticketing-secret --from-literal=NODE_ENV=production --from-literal=MONGODB_URL=mongodb://auth-mongo-srv:27017/auth --from-literal=PORT=3000
+
+#
