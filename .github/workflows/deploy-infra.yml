@@ -8,7 +8,7 @@ on:
       - "infra/k8s/prod/**"
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
